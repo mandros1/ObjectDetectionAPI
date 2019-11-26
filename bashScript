@@ -1,0 +1,4 @@
+#!/bin/bash
+# My script
+
+python3 script.py $1

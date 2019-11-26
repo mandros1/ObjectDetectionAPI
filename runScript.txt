@@ -1,0 +1,19 @@
+pip install -r requirementsPython.txt
+
+1. Tensorflow docker server
+docker run -p 8501:8501 --mount type=bind,source=D:\Projects\ObjectRecognition\classification_model\,target=/models/classification_model --mount type=bind,source=D:\Projects\ObjectRecognition\retinanet_savedmodel2\,target=/models/retinanet_model --mount type=bind,source=D:\Projects\ObjectRecognition\models.conf,target=/models/models.conf -e MODEL_NAME=my_model -t tensorflow/serving --model_config_file=/models/models.conf
+
+	*if fail check the shared drives, uncheck and check them back, if firewall is blocking you it might be because of the VPN
+	or it needs to be ran like admin. Restart it.
+	Also might need to demand the container tensorflow/serving
+
+	*already used port - use 'docker ps' to list all containers and then 'docker kill #processID#'
+
+2. Flask server
+flask run --host=0.0.0.0
+
+	*on self.socket.bind(self.server_address) it can fail with error number 11001 getaddrinfo failed
+	just run the same command without the host flag, so 'flask run'
+
+3. Python script
+python FlaskSampleRequest.py -i .\test-image-4.jpg
