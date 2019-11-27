@@ -43,6 +43,10 @@ app.post("/shelfobjectdetector/detect", (req, res) => {
                 console.log('Error: ' + err);
             }
 
+	    if (stderr) {
+		console.log('Error: ' + stderr);
+	    }
+
             fs.unlink(`./${filename}`, (err) => {
                 if (err) {
                     console.log(`Error: ${err}`);

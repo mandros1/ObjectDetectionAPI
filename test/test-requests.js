@@ -1,38 +1,36 @@
-let expect = require('chai').expect;
-// let request = require('request');
-let fs = require('fs');
-
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../index');
-let should = chai.should();
-
-
-// describe ('Main requests', function() {
-//     it('POST', function (done) {
-//         request('http://localhost:3005/shelfobjectdetector/detect', function (error, response, body){
-//             expect(response.statusCode).to.equal(200);
-//             expect(body).to.equal('Hello World');
-//             done();
-//         })
-//     });
-// });
+const chai = require('chai');
+const expect = chai.expect;
+const assert = chai.assert;
+const fs = require('fs');
+const chaiHttp = require('chai-http');
+const server = require('../index');
+const should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('Image processing', () => {
-    it('it should not POST without base64 data encoded', (done) => {
+    it('POST request checking', (done) => {
         let baseData = fs.readFileSync('test-image-4.jpg', { encoding: 'base64' });
-        chai.request(server)
+	let postData = {imageBase64: baseData, token: "DF3A2DEEB01F32C0C6B98DC810FB0D80"};
+       	chai.request(server)
             .post('/shelfobjectdetector/detect')
-            .send(baseData)
+            .send(postData)
             .end((err, res) => {
-                console.log(res.body);
+                if(err) assert.fail(0,1,err);
+		let array = null;
+		try{
+			array = JSON.parse(res.text);
+		} catch(e) {
+			assert.fail(0,1,'String returned by the POST is not in a format of an array');
+		}
+		expect(err).to.be.null;
                 res.should.have.status(200);
-                done();
+		expect(array).to.be.an('array');
+		expect(array).to.not.be.empty;
+		expect(array.length).to.be.above(1);
+		if(err) done(err);
+		else done();
             });
     });
 });
-
-
 
