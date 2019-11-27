@@ -11,6 +11,10 @@ const port = process.env.PORT || 3100;
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 
+app.get('/', function (req, res) {
+    res.send('Hello World')
+})
+
 app.post("/shelfobjectdetector/detect", (req, res) => {
     const body = req.body;
     const token = body.token;
@@ -54,3 +58,5 @@ app.post("/shelfobjectdetector/detect", (req, res) => {
 app.listen(port, () => {
     console.log(`API is running on port ${port}`);
 });
+
+module.exports = app;
